@@ -11,8 +11,22 @@
 // system関数のクローン
 int mysystem(char *command) {
   int status = 0;
+  int pid=fork();
 
-  // ここにプログラムを書く
+  if (pid < 0)
+   return -1;
+
+  if (command == NULL)
+   return 1;
+
+  if (pid != 0){
+    while(wait(&status)!=pid);
+  }
+  else {
+    execl("/bin/sh","sh","-c",command,NULL);
+    perror("/bin/sh");
+    exit (127);
+  }
 
   return status;
 }
